@@ -26,8 +26,14 @@ const client = new MongoClient(uri, {
 const run = async () => {
   try {
 
-    app.post("/users", (req, res)=>{
+    const dataBase = client.db("usersDb")
+    const usersCollection = dataBase.collection('users')
+
+    app.post("/users", async(req, res)=>{
         console.log("data from client", req.body);
+        const newUser = req.body
+        const result = await usersCollection.insertOne(newUser)
+        res.send(result)
     })
 
     await client.connect();
