@@ -1,7 +1,11 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3002;
+
+app.use(cors())
+app.use(express.json())
 
 // user : simpleDbUser2
 // pass : hfeUZl0jttd1tKeR
@@ -21,6 +25,11 @@ const client = new MongoClient(uri, {
 // function
 const run = async () => {
   try {
+
+    app.post("/users", (req, res)=>{
+        console.log("data from client", req.body);
+    })
+
     await client.connect();
     await client.db("admin").command({ ping: 1 });
     console.log(
