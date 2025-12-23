@@ -37,7 +37,6 @@ const run = async () => {
 
     app.get('/users/:id', async(req, res)=>{
       const id = req.params.id
-      console.log(id);
       const query = {_id: new ObjectId(id)}
       const result = await usersCollection.findOne(query)
       res.send(result)
@@ -47,6 +46,23 @@ const run = async () => {
     app.post('/users', async(req, res)=>{
       const newUser = req.body
       const result = await usersCollection.insertOne(newUser)
+      res.send(result)
+    })
+
+    // put/update method
+    app.put("/users/:id", async(req, res)=>{
+      console.log(req.params.id);
+      const id = req.params.id
+      const filter = {_id: new ObjectId(id)}
+      const user = req.body
+      console.log(user);
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          email: user.email
+        }
+      }
+      const result = await usersCollection.updateOne(filter, updatedUser)
       res.send(result)
     })
 
